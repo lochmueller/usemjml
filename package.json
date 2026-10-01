@@ -1,0 +1,28 @@
+{
+  "name": "mjml-server",
+  "version": "1.0.0",
+  "description": "Small, fast HTTP API to render, validate and inspect MJML — with optional Basic Auth.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lochmueller/mjml-server.git"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "@fastify/cors": "11.3.0",
+    "fastify": "5.12.5",
+    "mjml-core": "5.4.1",
+    "mjml-preset-core": "5.4.1",
+    "mjml-validator": "5.4.1"
+  }
+}

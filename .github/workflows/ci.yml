@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+      - run: npm test
+
+  image:
+    name: Image smoke test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: docker/setup-buildx-action@v4
+
+      - name: Build image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          load: true
+          tags: mjml-server:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Start container
+        run: |
+          docker run -d --name mjml \
+            -p 8080:8080 \
+            -e BASIC_AUTH_USER=ci \
+            -e BASIC_AUTH_PASSWORD=ci-secret \
+            mjml-server:ci
+          for _ in $(seq 1 30); do
+            curl -fsS http://127.0.0.1:8080/health >/dev/null && exit 0
+            sleep 1
+          done
+          docker logs mjml
+          exit 1
+
+      - name: Check the API
+        run: |
+          set -euo pipefail
+
+          echo "::group::version"
+          curl -fsS -u ci:ci-secret http://127.0.0.1:8080/version | tee /dev/stderr | grep -q '"mjml"'
+          echo "::endgroup::"
+
+          echo "::group::render"
+          curl -fsS -u ci:ci-secret -H 'Content-Type: text/plain' \
+            --data-binary '<mjml><mj-body><mj-section><mj-column><mj-text>CI</mj-text></mj-column></mj-section></mj-body></mjml>' \
+            http://127.0.0.1:8080/render | grep -q 'CI'
+          echo "::endgroup::"
+
+          echo "::group::validate"
+          curl -fsS -u ci:ci-secret -H 'Content-Type: application/json' \
+            -d '{"mjml":"<mjml><mj-body><mj-text>x</mj-text></mj-body></mjml>"}' \
+            http://127.0.0.1:8080/validate | grep -q '"valid":false'
+          echo "::endgroup::"
+
+          echo "::group::basic auth"
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8080/version)" = "401"
+          echo "::endgroup::"
+
+      - name: Container logs
+        if: always()
+        run: docker logs mjml

@@ -1,0 +1,26 @@
+services:
+  mjml:
+    image: ghcr.io/lochmueller/mjml-server:latest
+    # Comment the image out and uncomment this to build locally:
+    # build: .
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # Remove both to run the API unprotected.
+      BASIC_AUTH_USER: ${BASIC_AUTH_USER:?set BASIC_AUTH_USER in .env}
+      BASIC_AUTH_PASSWORD: ${BASIC_AUTH_PASSWORD:?set BASIC_AUTH_PASSWORD in .env}
+      MJML_VALIDATION_LEVEL: soft
+      MJML_MINIFY: "false"
+      LOG_LEVEL: info
+    # The server never writes to disk.
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    # Mount mj-include partials and set MJML_INCLUDES=true to use them:
+    # volumes:
+    #   - ./partials:/var/lib/mjml/includes:ro
