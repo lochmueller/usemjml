@@ -19,7 +19,7 @@
     "test": "node --test test/*.test.js"
   },
   "dependencies": {
-    "@fastify/cors": "11.3.0",
+    "@fastify/cors": "11.3.1",
     "fastify": "5.12.5",
     "mjml-core": "5.4.1",
     "mjml-preset-core": "5.4.1",
