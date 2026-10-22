@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ARG NODE_VERSION=24-alpine
-ARG ALPINE_VERSION=3.22
+ARG ALPINE_VERSION=3.24
 
 # ---------------------------------------------------------------------------
 # Dependencies — all pure JavaScript, so they are installed once on the build
