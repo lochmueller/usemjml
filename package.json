@@ -10,7 +10,7 @@
     "url": "git+https://github.com/lochmueller/mjml-server.git"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=26"
   },
   "main": "src/server.js",
   "scripts": {

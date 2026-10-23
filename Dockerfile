@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG NODE_VERSION=24-alpine
+ARG NODE_VERSION=26-alpine
 ARG ALPINE_VERSION=3.24
 
 # ---------------------------------------------------------------------------
@@ -37,9 +37,10 @@ ENV NODE_ENV=production \
     PORT=8080 \
     MJML_INCLUDE_DIR=/var/lib/mjml/includes
 
-# libstdc++ is the only shared library the node binary needs on musl.
+# libstdc++ and libatomic (required since Node 26) are the only shared
+# libraries the node binary needs on musl.
 # The include directory is where mj-include partials can be mounted read only.
-RUN apk add --no-cache libstdc++ \
+RUN apk add --no-cache libstdc++ libatomic \
  && addgroup -g 1000 -S node \
  && adduser -u 1000 -S -G node node \
  && mkdir -p "${MJML_INCLUDE_DIR}"
