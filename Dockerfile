@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG NODE_VERSION=24-alpine
+ARG NODE_VERSION=26-alpine
 ARG ALPINE_VERSION=3.24
 
 # ---------------------------------------------------------------------------

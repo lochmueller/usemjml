@@ -4,7 +4,7 @@ A small, fast HTTP API around [MJML](https://mjml.io): render templates to HTML,
 validate them, and ask which MJML version is running — optionally protected with
 HTTP Basic Auth, configured entirely through environment variables.
 
-- **Fast**: [Fastify](https://fastify.dev) on Node 24, no framework overhead.
+- **Fast**: [Fastify](https://fastify.dev) on Node 26, no framework overhead.
 - **Slim**: ~167 MB image — Alpine plus the bare `node` binary, no npm, no MJML CLI.
 - **Safe by default**: runs as a non-root user, `mj-include` is disabled, and
   client-supplied options can never touch the file system.
@@ -137,7 +137,7 @@ with `422`.
 `/version`:
 
 ```json
-{ "mjml": "5.4.1", "server": "mjml-server", "node": "24.21.0" }
+{ "mjml": "5.4.1", "server": "mjml-server", "node": "26.12.1" }
 ```
 
 ### Status codes
@@ -390,7 +390,7 @@ published port is fine.
 ## How it stays small
 
 - The runtime image is plain `alpine` with the `node` binary copied in from
-  `node:24-alpine` — npm, corepack and their ~18 MB never reach the final layer.
+  `node:26-alpine` — npm, corepack and their ~18 MB never reach the final layer.
 - Dependencies are `mjml-core`, `mjml-preset-core` and `mjml-validator` instead
   of the `mjml` umbrella package. That package adds nothing but the same three
   lines of wiring (see [src/mjml.js](src/mjml.js)) plus the CLI with `chokidar`,
