@@ -19,10 +19,14 @@
     "test": "node --test test/*.test.js"
   },
   "dependencies": {
-    "@fastify/cors": "11.3.1",
-    "fastify": "5.12.7",
+    "@fastify/cors": "11.4.1",
+    "fastify": "5.12.8",
     "mjml-core": "5.4.1",
     "mjml-preset-core": "5.4.1",
     "mjml-validator": "5.4.1"
+  },
+  "overrides": {
+    "glob": "^14.0.5",
+    "minimatch": "^11.0.8"
   }
 }

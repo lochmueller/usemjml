@@ -5,7 +5,7 @@ validate them, and ask which MJML version is running — optionally protected wi
 HTTP Basic Auth, configured entirely through environment variables.
 
 - **Fast**: [Fastify](https://fastify.dev) on Node 26, no framework overhead.
-- **Slim**: ~167 MB image — Alpine plus the bare `node` binary, no npm, no MJML CLI.
+- **Slim**: ~188 MB image — Alpine plus the bare `node` binary, no npm, no MJML CLI.
 - **Safe by default**: runs as a non-root user, `mj-include` is disabled, and
   client-supplied options can never touch the file system.
 - **Drop-in**: `POST /` behaves like other `mjml-server` images.
